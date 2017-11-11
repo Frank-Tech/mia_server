@@ -17,7 +17,10 @@ class QueryHandler:
         try:
             data = self._request.get("d", "")
             json_data = json.loads(data)
-
+            if "birthday" not in json_data:
+                birth_day = ""
+            else:
+                birth_day = json_data["birth_day"]
             row = {
                 "date_created": datetime.datetime.now(),
                 "mid": json_data["mid"],
@@ -25,7 +28,7 @@ class QueryHandler:
                 "email": json_data["email"],
                 "name": json_data["name"],
                 "gender": json_data["gender"],
-                "birth_day": json_data["birth_day"],
+                "birth_day":birth_day,
             }
 
             users_table = MySqlHandler.users()
@@ -59,7 +62,7 @@ class QueryHandler:
             locations_table = MySqlHandler.locations()
             users_table = MySqlHandler.users()
 
-            existing_user = select([users_table.c.id]) \
+            existing_user = select([users_table.c.id, users_table.c.face_id]) \
                 .where(users_table.c.email == email) \
                 .execute().first()
 
@@ -70,6 +73,7 @@ class QueryHandler:
                     .execute().first()
 
                 if existing_location is None:
+                    location["user_id"] = existing_user[0]
                     locations_table.insert().values(location).execute()
                 else:
                     updated_location = {
@@ -81,14 +85,14 @@ class QueryHandler:
                     locations_table.update().where(locations_table.c.user_id == existing_user[0]) \
                         .values(updated_location).execute()
 
+                    self.locations_get(existing_user[1])
+
         except Exception, e:
             print e
         return "OK"
 
-    def locations_get(self):
+    def locations_get(self, face_id):
         try:
-            face_id = self._request.get("fid", "")
-
             locations_table = MySqlHandler.locations()
             users_table = MySqlHandler.users()
 
@@ -116,6 +120,7 @@ class QueryHandler:
                     row_data["face_id"] = face_id
                     near_users.append(json.dumps(row_data, default=str))
 
+                print near_users
                 return near_users
 
 
