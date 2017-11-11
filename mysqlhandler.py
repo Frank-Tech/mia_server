@@ -8,7 +8,7 @@ class MySqlHandler:
     def __init__(self):
         pass
 
-    server = create_engine(Config.MYSQL_SERVER, echo=False, convert_unicode=True)
+    server = create_engine(Config.MYSQL_REMOTE_SERVER, echo=False, convert_unicode=True)
 
     @staticmethod
     def users():

@@ -33,5 +33,11 @@ def update_location():
     response = Response(location, status=200)
     return response
 
+@app.route('/get_locations')
+def get_locations():
+    location = QueryHandler().locations_get()
+    response = Response(location, status=200)
+    return response
+
 if __name__ == '__main__':
     app.run(host="0.0.0.0")
