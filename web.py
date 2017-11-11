@@ -1,5 +1,7 @@
-from flask import Flask, request
-import pymysql
+from flask import Flask, Response
+
+from queryHandler import QueryHandler
+
 app = Flask(__name__)
 
 # Connect to the database
@@ -9,11 +11,11 @@ app = Flask(__name__)
 #                              db='mia',
 #                              port=3306)
 
-connection = pymysql.connect(host='localhost',
-                             user='root',
-                             password='miaSqlServer113',
-                             db='mia',
-                             port=3306)
+# connection = pymysql.connect(host='localhost',
+#                              user='root',
+#                              password='miaSqlServer113',
+#                              db='mia',
+#                              port=3306)
 
 @app.route('/')
 def hello_world():
@@ -21,8 +23,15 @@ def hello_world():
 
 @app.route('/user')
 def insert_user():
-    data = request.args.get('d')
-    print data
+    new_user = QueryHandler().new_user()
+    response = Response(new_user, status=200)
+    return response
+
+@app.route('/location')
+def update_location():
+    location = QueryHandler().location_update()
+    response = Response(location, status=200)
+    return response
 
 if __name__ == '__main__':
     app.run(host="0.0.0.0")
