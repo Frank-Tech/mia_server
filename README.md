@@ -5,5 +5,5 @@ sqlalchemy
 
 sql requirements:
 
-define yout home ip 
+define your home ip
 in order to be able to conenct the sql

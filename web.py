@@ -1,8 +1,10 @@
 from flask import Flask, Response
 
 from queryHandler import QueryHandler
+from fcmManager import fcmManager;
 
 app = Flask(__name__)
+
 
 # Connect to the database
 # connection = pymysql.connect(host='52.14.253.14',
@@ -21,23 +23,31 @@ app = Flask(__name__)
 def hello_world():
     return 'Hello, World!'
 
+
 @app.route('/user')
 def insert_user():
-    new_user = QueryHandler().new_user()
-    response = Response(new_user, status=200)
-    return response
+    return Response(QueryHandler().new_user(), status=200)
+
 
 @app.route('/location')
 def update_location():
-    location = QueryHandler().location_update()
-    response = Response(location, status=200)
-    return response
+    return Response(QueryHandler().location_update(), status=200)
+
 
 @app.route('/get_locations')
 def get_locations():
-    location = QueryHandler().locations_get()
-    response = Response(location, status=200)
-    return response
+    return Response(QueryHandler().locations_get(), status=200)
+
+
+@app.route('/block')
+def block():
+    return Response(status=200)
+
+@app.route('/push')
+def push():
+    return Response(fcmManager().send(), status=200);
+
+
 
 if __name__ == '__main__':
     app.run(host="0.0.0.0")
