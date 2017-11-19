@@ -23,6 +23,7 @@ class fcmManager:
         registration_id = self._request.get("id", "")
         message_title = self._request.get("t", "")
         message_body = self._request.get("b", "")
+        message_from = self._request.get("f", "")
         result = fcmManager.push_service.notify_single_device(registration_id=registration_id, message_title=message_title,
-                                                   message_body=message_body)
+                                                   message_body=message_body, message_from=message_from)
         return result
