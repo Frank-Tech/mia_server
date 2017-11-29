@@ -108,7 +108,7 @@ class QueryHandler:
                     .execute().first()
 
                 query = ("SELECT longitude, latitude, user_id, ( ( ( Acos(Sin(( {0} * Pi() / 180 )) * Sin(( `latitude` * Pi() / 180 ))+ Cos (( {0} * Pi() / 180 )) * Cos(( `latitude` * Pi() / 180 )) * Cos(( ( {1} - `longitude` ) * Pi() / 180 ))) ) * 180 / Pi ()) * 60 * 1.1515 * 1.609344 * 1000 ) AS METERS FROM users_location "
-                         "HAVING  METERS <= 20000 and user_id <>{2}")\
+                         "HAVING  METERS <= 400000 and user_id <>{2}")\
                     .format(current_location[1], current_location[0], existing_user[0])
 
                 sql = text(query)
